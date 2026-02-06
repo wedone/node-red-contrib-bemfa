@@ -1,0 +1,80 @@
+<script type="text/javascript">
+    RED.nodes.registerType('bemfa-control', {
+        category: '巴法云',
+        color: '#FF9800',
+        defaults: {
+            name: { value: "" },
+            bemfa: { type: "bemfa-config", required: true },
+            topic: { value: "" },
+            command: { value: "" },
+            useMsgPayload: { value: true }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "bridge.svg",
+        label: function() {
+            return this.name || "巴法控制";
+        },
+        labelStyle: function() {
+            return this.name ? "node_label_italic" : "";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="bemfa-control">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> 名称</label>
+        <input type="text" id="node-input-name" placeholder="名称">
+    </div>
+    <div class="form-row">
+        <label for="node-input-bemfa"><i class="fa fa-globe"></i> 配置</label>
+        <input type="text" id="node-input-bemfa">
+    </div>
+    <div class="form-row">
+        <label for="node-input-topic"><i class="fa fa-envelope"></i> 主题</label>
+        <input type="text" id="node-input-topic" placeholder="例如: led002">
+    </div>
+    <div class="form-row">
+        <label for="node-input-command"><i class="fa fa-terminal"></i> 固定命令</label>
+        <input type="text" id="node-input-command" placeholder="例如: on 或 off">
+    </div>
+    <div class="form-row">
+        <label for="node-input-useMsgPayload" style="width: auto;">
+            <input type="checkbox" id="node-input-useMsgPayload" style="display: inline-block; width: auto; vertical-align: top;">
+            使用输入消息的 payload 作为命令
+        </label>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="bemfa-control">
+    <p>向巴法云设备发送控制命令</p>
+    
+    <h3>输入</h3>
+    <dl class="message-properties">
+        <dt class="optional">topic <span class="property-type">string</span></dt>
+        <dd>设备主题（覆盖节点配置）</dd>
+        <dt class="optional">payload <span class="property-type">string/object</span></dt>
+        <dd>要发送的命令内容</dd>
+    </dl>
+    
+    <h3>输出</h3>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string</span></dt>
+        <dd>发送到的主题</dd>
+        <dt>payload <span class="property-type">string</span></dt>
+        <dd>发送的内容</dd>
+        <dt>success <span class="property-type">boolean</span></dt>
+        <dd>是否发送成功</dd>
+    </dl>
+    
+    <h3>使用方式</h3>
+    <p><b>方式 1：固定命令</b></p>
+    <p>在节点中配置固定命令（如 "on" 或 "off"），任何输入都会触发该命令</p>
+    
+    <p><b>方式 2：动态命令</b></p>
+    <p>勾选"使用输入消息的 payload"，将输入消息的内容作为命令发送</p>
+    
+    <h3>示例</h3>
+    <p>输入: <code>{"payload": "on"}</code></p>
+    <p>发送: <code>on</code> 到配置的主题</p>
+</script>

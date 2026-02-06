@@ -1,0 +1,94 @@
+<script type="text/javascript">
+    RED.nodes.registerType('bemfa-device', {
+        category: '巴法云',
+        color: '#4CAF50',
+        defaults: {
+            name: { value: "" },
+            bemfa: { type: "bemfa-config", required: true },
+            topic: { value: "", required: true },
+            parseData: { value: false },
+            datatype: { value: "auto" }
+        },
+        inputs: 0,
+        outputs: 1,
+        icon: "bridge.svg",
+        label: function() {
+            return this.name || this.topic || "巴法设备";
+        },
+        labelStyle: function() {
+            return this.name ? "node_label_italic" : "";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="bemfa-device">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> 名称</label>
+        <input type="text" id="node-input-name" placeholder="名称">
+    </div>
+    <div class="form-row">
+        <label for="node-input-bemfa"><i class="fa fa-globe"></i> 配置</label>
+        <input type="text" id="node-input-bemfa">
+    </div>
+    <div class="form-row">
+        <label for="node-input-topic"><i class="fa fa-envelope"></i> 主题</label>
+        <input type="text" id="node-input-topic" placeholder="例如: led002">
+    </div>
+    <div class="form-row">
+        <label for="node-input-parseData" style="width: auto;">
+            <input type="checkbox" id="node-input-parseData" style="display: inline-block; width: auto; vertical-align: top;">
+            自动解析数据格式
+        </label>
+    </div>
+    <div class="form-row" id="datatype-row">
+        <label for="node-input-datatype"><i class="fa fa-code"></i> 数据类型</label>
+        <select id="node-input-datatype">
+            <option value="auto">自动检测</option>
+            <option value="json">JSON</option>
+            <option value="xiaomi">小米格式 (#温度#湿度#)</option>
+            <option value="text">纯文本</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="bemfa-device">
+    <p>订阅巴法云设备消息，支持自动解析数据格式</p>
+    
+    <h3>输出</h3>
+    <dl class="message-properties">
+        <dt>topic <span class="property-type">string</span></dt>
+        <dd>设备主题</dd>
+        <dt>payload <span class="property-type">object/string</span></dt>
+        <dd>解析后的数据内容</dd>
+        <dt>raw <span class="property-type">string</span></dt>
+        <dd>原始消息内容</dd>
+    </dl>
+    
+    <h3>数据格式解析</h3>
+    <ul>
+        <li><b>自动检测</b>：自动识别 JSON 和小米格式</li>
+        <li><b>小米格式</b>：解析 #温度#湿度#开关# 格式</li>
+        <li><b>JSON</b>：解析 JSON 字符串为对象</li>
+    </ul>
+    
+    <h3>示例</h3>
+    <p>小米格式输入: <code>#25.5#60#on#</code></p>
+    <p>输出:</p>
+    <pre>{
+  "temp": "25.5",
+  "hum": "60",
+  "state": "on"
+}</pre>
+</script>
+
+<script type="text/javascript">
+    $(function() {
+        $('#node-input-parseData').change(function() {
+            if ($(this).is(':checked')) {
+                $('#datatype-row').show();
+            } else {
+                $('#datatype-row').hide();
+            }
+        });
+    });
+</script>

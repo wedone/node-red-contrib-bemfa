@@ -1,0 +1,42 @@
+{
+  "name": "node-red-contrib-bemfa",
+  "version": "1.0.0",
+  "description": "巴法云物联网平台 Node-RED 节点，支持设备订阅、控制和自动化",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/node-red-contrib-bemfa.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/node-red-contrib-bemfa/issues"
+  },
+  "homepage": "https://github.com/yourusername/node-red-contrib-bemfa#readme",
+  "keywords": [
+    "node-red",
+    "bemfa",
+    "巴法云",
+    "iot",
+    "mqtt",
+    "智能家居",
+    "home-automation"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "node-red": {
+    "version": ">=2.0.0",
+    "nodes": {
+      "bemfa-config": "bemfa-config.js",
+      "bemfa-device": "bemfa-device.js",
+      "bemfa-control": "bemfa-control.js"
+    }
+  },
+  "dependencies": {
+    "mqtt": "^5.0.3"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -1,0 +1,48 @@
+<script type="text/javascript">
+    RED.nodes.registerType('bemfa-config', {
+        category: 'config',
+        defaults: {
+            name: { value: "" },
+            broker: { value: "bemfa.com", required: true },
+            port: { value: 9501, required: true, validate: RED.validators.number() }
+        },
+        credentials: {
+            uid: { type: "text", required: true }
+        },
+        label: function() {
+            return this.name || "巴法云配置";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="bemfa-config">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> 名称</label>
+        <input type="text" id="node-config-input-name" placeholder="名称">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-uid"><i class="fa fa-key"></i> 私钥 UID</label>
+        <input type="text" id="node-config-input-uid" placeholder="从巴法云控制台获取">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-broker"><i class="fa fa-server"></i> 服务器</label>
+        <input type="text" id="node-config-input-broker" value="bemfa.com">
+    </div>
+    <div class="form-row">
+        <label for="node-config-input-port"><i class="fa fa-hashtag"></i> 端口</label>
+        <input type="number" id="node-config-input-port" value="9501">
+    </div>
+</script>
+
+<script type="text/html" data-help-name="bemfa-config">
+    <p>配置巴法云连接参数</p>
+    <h3>配置说明</h3>
+    <dl class="message-properties">
+        <dt>私钥 UID <span class="property-type">string</span></dt>
+        <dd>从<a href="https://cloud.bemfa.com/tcp/index.html" target="_blank">巴法云控制台</a>获取的私钥</dd>
+        <dt>服务器 <span class="property-type">string</span></dt>
+        <dd>默认为 bemfa.com</dd>
+        <dt>端口 <span class="property-type">number</span></dt>
+        <dd>默认为 9501</dd>
+    </dl>
+</script>

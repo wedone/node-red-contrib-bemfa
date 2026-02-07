@@ -1,0 +1,100 @@
+<script type="text/javascript">
+    RED.nodes.registerType('bemfa-manager', {
+        category: '巴法云',
+        color: '#2196F3',
+        defaults: {
+            name: { value: "" },
+            bemfa: { type: "bemfa-config", required: true },
+            refreshInterval: { value: 300, validate: RED.validators.number() },
+            autoSubscribe: { value: true },
+            outputDeviceInfo: { value: true }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: "font-awesome/fa-sitemap",
+        label: function() {
+            return this.name || "巴法管理器";
+        },
+        labelStyle: function() {
+            return this.name ? "node_label_italic" : "";
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="bemfa-manager">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> 名称</label>
+        <input type="text" id="node-input-name" placeholder="名称">
+    </div>
+    <div class="form-row">
+        <label for="node-input-bemfa"><i class="fa fa-globe"></i> 配置</label>
+        <input type="text" id="node-input-bemfa">
+    </div>
+    <div class="form-row">
+        <label for="node-input-refreshInterval"><i class="fa fa-clock-o"></i> 刷新间隔(秒)</label>
+        <input type="number" id="node-input-refreshInterval" value="300" min="30">
+    </div>
+    <div class="form-row">
+        <label style="width: auto;">
+            <input type="checkbox" id="node-input-autoSubscribe" style="display: inline-block; width: auto; vertical-align: top;">
+            自动订阅所有设备主题
+        </label>
+    </div>
+    <div class="form-row">
+        <label style="width: auto;">
+            <input type="checkbox" id="node-input-outputDeviceInfo" style="display: inline-block; width: auto; vertical-align: top;">
+            输出中包含设备信息
+        </label>
+    </div>
+</script>
+
+<script type="text/html" data-help-name="bemfa-manager">
+    <p>巴法云设备管理器，自动发现账号下所有设备并批量订阅</p>
+    
+    <h3>功能特性</h3>
+    <ul>
+        <li>自动拉取账号下所有设备列表</li>
+        <li>自动订阅所有主题的 MQTT 消息</li>
+        <li>定期刷新设备列表（检测新增/删除）</li>
+        <li>支持通过 HTTP API 发送控制命令</li>
+    </ul>
+    
+    <h3>输入</h3>
+    <dl class="message-properties">
+        <dt>控制命令 <span class="property-type">object</span></dt>
+        <dd>
+            <pre>{
+  "topic": "led002",
+  "payload": "on"
+}</pre>
+        </dd>
+        <dt>刷新列表 <span class="property-type">object</span></dt>
+        <dd>
+            <pre>{"refresh": true}</pre>
+        </dd>
+    </dl>
+    
+    <h3>输出</h3>
+    <dl class="message-properties">
+        <dt>设备消息 <span class="property-type">object</span></dt>
+        <dd>
+            <pre>{
+  "topic": "temp004",
+  "payload": {"temp": "25.5", "hum": "60"},
+  "raw": "#25.5#60#",
+  "device": {
+    "name": "温度传感器",
+    "type": "sensor",
+    "online": true
+  }
+}</pre>
+        </dd>
+    </dl>
+    
+    <h3>配置说明</h3>
+    <ul>
+        <li><b>刷新间隔</b>：多久检查一次设备列表变化（秒）</li>
+        <li><b>自动订阅</b>：自动订阅所有设备主题</li>
+        <li><b>输出设备信息</b>：消息中是否包含设备名称、类型等</li>
+    </ul>
+</script>

@@ -4,9 +4,10 @@
 
 ## 功能特性
 
-- ** bemfa-config **：配置巴法云连接参数（私钥、服务器等）
-- ** bemfa-device **：订阅设备消息，支持自动解析数据格式
-- ** bemfa-control **：向设备发送控制命令
+- **bemfa-config**：配置巴法云连接参数（私钥、服务器等）
+- **bemfa-device**：订阅单个设备消息，支持自动解析数据格式
+- **bemfa-control**：向设备发送控制命令（MQTT 或 HTTP API）
+- **bemfa-manager**：自动发现账号下所有设备，批量订阅管理
 
 ## 安装
 
@@ -41,13 +42,48 @@ npm install node-red-contrib-bemfa
 
 ### 3. 发送控制命令（bemfa-control）
 
-**方式 1：固定命令**
+**方式 1：MQTT 发布（默认）**
+- 通过 MQTT 连接发送命令
 - 在节点中配置固定命令（如 `on` / `off`）
-- 连接 inject 节点触发
 
-**方式 2：动态命令**
+**方式 2：HTTP API**
+- 勾选"使用 HTTP API 发送"
+- 不依赖 MQTT 连接，直接调用 HTTP 接口
+- 适合远程控制或 MQTT 未连接时使用
+
+**方式 3：动态命令**
 - 勾选"使用输入消息的 payload"
 - 上游节点的 payload 将作为命令发送
+
+### 4. 设备管理器（bemfa-manager）
+
+**功能特性：**
+- 自动拉取账号下所有设备列表
+- 批量订阅所有主题的 MQTT 消息
+- 定期刷新设备列表（检测新增/删除设备）
+- 统一输出所有设备消息
+- 支持通过 HTTP API 发送控制命令
+
+**使用示例：**
+```
+[bemfa-manager]
+  ├── 自动发现：temp004, led002, ac005...
+  ├── 批量订阅：所有主题
+  └── 输出所有设备消息（通过 msg.topic 区分）
+```
+
+**输入控制命令：**
+```json
+{
+  "topic": "led002",
+  "payload": "on"
+}
+```
+
+**手动刷新设备列表：**
+```json
+{"refresh": true}
+```
 
 ## 自动化示例
 
@@ -136,11 +172,38 @@ npm install node-red-contrib-bemfa
 
 ### bemfa-control 输出
 
+MQTT 模式：
 ```json
 {
   "topic": "led002",
   "payload": "on",
   "success": true
+}
+```
+
+HTTP API 模式：
+```json
+{
+  "topic": "led002",
+  "payload": "on",
+  "result": {"code": 0, "message": "OK"},
+  "success": true
+}
+```
+
+### bemfa-manager 输出
+
+```json
+{
+  "topic": "temp004",
+  "payload": {"temp": "25.5", "hum": "60"},
+  "raw": "#25.5#60#",
+  "device": {
+    "name": "温度传感器",
+    "type": "sensor",
+    "online": true,
+    "time": "2026-02-07 10:30:00"
+  }
 }
 ```
 

@@ -24,12 +24,13 @@
   ],
   "author": "WeDone <wedone@msn.com>",
   "license": "MIT",
-  "node-red": {
+    "node-red": {
     "version": ">=2.0.0",
     "nodes": {
       "bemfa-config": "bemfa-config.js",
       "bemfa-device": "bemfa-device.js",
-      "bemfa-control": "bemfa-control.js"
+      "bemfa-control": "bemfa-control.js",
+      "bemfa-manager": "bemfa-manager.js"
     }
   },
   "dependencies": {

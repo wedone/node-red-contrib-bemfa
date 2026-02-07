@@ -1,6 +1,6 @@
 {
   "name": "@iwedo/node-red-contrib-bemfa",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "巴法云物联网平台 Node-RED 节点，支持设备订阅、控制和自动化",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

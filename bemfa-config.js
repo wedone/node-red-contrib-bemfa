@@ -3,7 +3,8 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, config);
         var node = this;
         
-        node.uid = config.uid;
+        // 从 credentials 获取私钥 UID（Node-RED 安全存储）
+        node.uid = this.credentials.uid;
         node.broker = config.broker || 'bemfa.com';
         node.port = config.port || 9501;
         
@@ -19,11 +20,16 @@ module.exports = function(RED) {
             var mqtt = require('mqtt');
             var brokerUrl = `mqtt://${node.broker}:${node.port}`;
             
+            // 巴法云 MQTT 连接：clientId 必须是私钥 UID，username/password 为空
             node.client = mqtt.connect(brokerUrl, {
                 clientId: node.uid,
+                username: '',
+                password: '',
                 keepalive: 60,
                 reconnectPeriod: 5000,
-                connectTimeout: 30000
+                connectTimeout: 30000,
+                clean: true,
+                protocolVersion: 4  // MQTT 3.1.1
             });
             
             node.client.on('connect', function() {
